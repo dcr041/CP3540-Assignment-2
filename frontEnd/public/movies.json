@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Joker",
+        "date": 2019,
+        "stars": ["Joaquin Phoenix", "Robert De Niro", "Zazie Beetz"],
+        "poster": "images/joker.jpg",
+        "rating": 4
+    },
+    {
+        "name": "Batman Begins",
+        "date": 2005,
+        "stars": ["Christian Bale", "Michael Caine", "Ken Watanabe"],
+        "poster": "images/batman_begins.jpg",
+        "rating": 4
+    },
+    {
+        "name": "The Dark Knight",
+        "date": 2008,
+        "stars": ["Christian Bale", "Heath Ledger", "Aaron Eckhart"],
+        "poster": "images/the_dark_knight.jpg",
+        "rating": 4.5
+    },
+    {
+        "name": "The Dark Knight Rises",
+        "date": 2012,
+        "stars": ["Christian Bale", "Tom Hardy", "Anne Hathaway"],
+        "poster": "images/the_dark_knight_rises.jpg",
+        "rating": 4
+    }
+]
