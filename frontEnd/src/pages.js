@@ -14,8 +14,21 @@ export function Home({movies, setMovies}) {
                 movies={movies}
                 onRemoveMovie = {
                     movieName => {
-                        const newMovies = movies.filter(movie => movie.name !== movieName);
-                        setMovies(newMovies);
+                        const removeMovie = async () => {
+                            const result = await fetch('/api/removeMovie', {
+                                method: "post",
+                                body: JSON.stringify({name: movieName}),
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            });
+                            const body = await result.json();
+                            if (body.message !== "Unable to delete movie") {
+                                const newMovies = movies.filter(movie => movie.name !== movieName);
+                                setMovies(newMovies);
+                            }
+                        }
+                        removeMovie();
                     }
                 }
             />
@@ -31,7 +44,9 @@ export function AddReview({movies, setMovies}) {
                 <Link to="/">Home</Link>
             </nav>
             <br></br>
-            <AddReviewForm 
+            <AddReviewForm
+                
+
                 onNewMovie={(name, date, stars, poster, rating) => {
                     const newReviews = [...movies, {name, date, stars, poster, rating}];
                     setMovies(newReviews);
