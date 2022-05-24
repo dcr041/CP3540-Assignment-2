@@ -31,12 +31,35 @@ app.post('/api/addMovie', async (req, res) => {
     }
 });
 
+app.post('/api/removeMovie', async (req, res) => {
+    try {
+        
+        await client.connect();
+
+        const db = client.db('movies')
+
+        const movieInfo = await db.collection('mymovies').deleteOne({name:req.body.name});
+        console.log(movieInfo);
+
+        if( movieInfo.deletedCount == 1) {
+            res.status(200).json({message: `Movie ${req.body.name} deleted`});
+        }
+        else {
+            res.status(200).json({message: "Unable to delete movie"});
+        }
+        client.close();
+    }
+    catch( error) {
+        res.status(500).json( { message: "Error connecting to db", error});
+    }
+});
+
 app.get('/api/data', async (req, res) => {
     try {
         
         await client.connect();
 
-        constdb = client.db('movies')
+        const db = client.db('movies')
 
         const movieInfo = await db.collection('mymovies').find({}).toArray();
 
