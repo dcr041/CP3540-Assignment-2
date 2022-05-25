@@ -10,16 +10,22 @@ export function AddReviewForm({onNewMovie = f => f}) {
 
     const navigate = useNavigate();
 
-    const changePoster = (poster) => {
-        setPoster(poster);
-    };
+    const formData = new FormData();
 
     const submit = evt => {
         evt.preventDefault();
-        onNewMovie(name, date, stars.split(', '), poster, rating);
+        let array = stars.split(',');
+        formData.append("name", name);
+        formData.append("date", date);
+        formData.append("stars", array);
+        formData.append("poster", poster);
+        formData.append("rating", rating);
+        onNewMovie(formData);
+
         setName("");
         setDate("");
         setStars([]);
+        setPoster({});
         setRating(0);
         navigate('/');
     }
@@ -58,17 +64,13 @@ export function AddReviewForm({onNewMovie = f => f}) {
                     />
                 </div>
                 <div>
-                    <select
-                        value={poster}
-                        onChange = {evt => changePoster(evt.target.value)}
+                    <label>Movie Poster:</label>
+                    <input    
+                        onChange = {evt => setPoster(evt.target.files[0])}
+                        type="file"
+                        accept=".png,.jfif,.jpg,.jpeg"
                         required
-                    >
-                        <option value="images/joker.jpg">Poster 1</option>
-                        <option value="images/batman_begins.jpg">Poster 2</option>
-                        <option value="images/the_dark_knight.jpg">Poster 3</option>
-                        <option value="images/the_dark_knight_rises.jpg">Poster 4</option>
-                        <option value="images/warrior.jpg">Poster 5</option>
-                    </select>
+                    />
                 </div>
                 <div>
                     <label>Rating:</label>
@@ -88,7 +90,7 @@ export function AddReviewForm({onNewMovie = f => f}) {
                     </select>
                 </div>
                 <div>
-                    <button variant="primary" type="submit" value="submit">Add Review</button>
+                    <button variant="primary" type="submit">Add Review</button>
                 </div>
             </form>
         </>

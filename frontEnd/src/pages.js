@@ -45,11 +45,19 @@ export function AddReview({movies, setMovies}) {
             </nav>
             <br></br>
             <AddReviewForm
-                
+                onNewMovie={(formData) => {
+                    const addMovie = async () => {
+                        const result = await fetch('/api/addMovie', {
+                            method: "post",
+                            body: formData
+                        });
+                        const body = await result.json();
+                        if (body.message == "Success") {
+                            setMovies(body.movies)
+                        }
 
-                onNewMovie={(name, date, stars, poster, rating) => {
-                    const newReviews = [...movies, {name, date, stars, poster, rating}];
-                    setMovies(newReviews);
+                    }
+                    addMovie();
                 }}
             />
         </>

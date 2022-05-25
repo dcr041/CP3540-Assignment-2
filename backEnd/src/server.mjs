@@ -10,26 +10,39 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, '/build')));
 
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const client = new MongoClient('mongodb://localhost:27017');
 
-app.post('/api/addMovie', async (req, res) => {
+const upload = multer({ filename: (req, file) => {file.originalname;}, dest: "./src/build/images/"});
+
+const uploadFiles = async (req, res) => {
     try {
         await client.connect();
 
         const db = client.db('movies')
 
-        const movieInfo = await db.collection('mymovies').insertOne(req.body);
+        await db.collection('mymovies').insertOne({
+            name:req.body.name, 
+            date:req.body.date, 
+            stars:req.body.stars.split(", "), 
+            poster:"/images/" + req.file.filename, 
+            rating:req.body.rating
+        })
 
-        res.sendStatus(200).json(movieInfo);
+        const movieInfo = await db.collection('mymovies').find({}).toArray();
+
+        res.sendStatus(200).json({message: "Success", movies: movieInfo});
 
         client.close();
     }
     catch( error ) {
         res.sendStatus(500);
     }
-});
+}
+
+app.post('/api/addMovie', upload.single("poster"), uploadFiles);
 
 app.post('/api/removeMovie', async (req, res) => {
     try {
