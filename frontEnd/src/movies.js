@@ -4,11 +4,11 @@ export function MovieList( { movies = [], onRemoveMovie = f => f}) {
     if(!movies.length) return <div>No Movie Reviews Available</div>;
 
     return (
-        <div>
+        <>
             {movies.map( movie => {
                 return <Movie key={movie.name} {...movie} onRemove={onRemoveMovie} />
-        })}
-        </div>
+            })}
+        </>
     );
 }
 

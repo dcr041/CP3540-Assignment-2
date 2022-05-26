@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function AddReviewForm({onNewMovie = f => f}) {
+export function AddReviewForm({onNewReview = f => f}) {
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
     const [stars, setStars] = useState("");
@@ -20,7 +20,7 @@ export function AddReviewForm({onNewMovie = f => f}) {
         formData.append("stars", array);
         formData.append("poster", poster);
         formData.append("rating", rating);
-        onNewMovie(formData);
+        onNewReview(formData);
 
         setName("");
         setDate("");
@@ -32,7 +32,7 @@ export function AddReviewForm({onNewMovie = f => f}) {
 
     return (
         <>
-            <form onSubmit={submit}>
+            <form name="addReview" encType="multipart/form-data" onSubmit={submit}>
                 <div>
                     <label>Movie Name: </label>
                     <input
