@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Form, Row, Col, Button } from "react-bootstrap";
 
 export function AddReviewForm({onNewReview = f => f}) {
     const [name, setName] = useState("");
@@ -32,67 +33,87 @@ export function AddReviewForm({onNewReview = f => f}) {
 
     return (
         <>
-            <form name="addReview" encType="multipart/form-data" onSubmit={submit}>
-                <div>
-                    <label>Movie Name: </label>
-                    <input
-                        type="text"
-                        placeholder="Enter movie name"
-                        value={name}
-                        onChange = {evt => setName(evt.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Release Date: </label>
-                    <input
-                        type="text"
-                        placeholder="Enter movie release date"
-                        value={date}
-                        onChange = {evt => setDate(evt.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Stars: </label>
-                    <input
-                        type="text"
-                        placeholder="Enter movie actors"
-                        value={stars}
-                        onChange = {evt => setStars(evt.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Movie Poster:</label>
-                    <input    
-                        onChange = {evt => setPoster(evt.target.files[0])}
-                        type="file"
-                        accept=".png,.jfif,.jpg,.jpeg"
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Rating:</label>
-                </div>
-                <div>
-                    <select
-                        value={rating}
-                        onChange = {evt => setRating(evt.target.value)}
-                        required
-                    >
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div>
-                    <button variant="primary" type="submit">Add Review</button>
-                </div>
-            </form>
+            <Form encType="multipart/form-data" className="pt-3 container border border-dark" onSubmit={submit}>
+                <Form.Group as={Row} className="mb-3">
+                    <Form.Label column sm={2}>
+                        Movie Name:
+                    </Form.Label>
+                    <Col sm={10}>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter movie name"
+                            value={name}
+                            onChange = {evt => setName(evt.target.value)}
+                            required
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                    <Form.Label column sm={2}>
+                        Release Date:
+                    </Form.Label>
+                    <Col sm={10}>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter movie release date"
+                            value={date}
+                            onChange = {evt => setDate(evt.target.value)}
+                            required
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                    <Form.Label column sm={2}>
+                        Stars:
+                    </Form.Label>
+                    <Col sm={10}>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter movie actors"
+                            value={stars}
+                            onChange = {evt => setStars(evt.target.value)}
+                            required
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                    <Form.Label column sm={2}>
+                        Movie Poster:
+                    </Form.Label>
+                    <Col sm={10}>
+                        <Form.Control
+                            onChange = {evt => setPoster(evt.target.files[0])}
+                            type="file"
+                            accept=".png,.jfif,.jpg,.jpeg"
+                            required
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                    <Form.Label>
+                        Rating:
+                    </Form.Label>
+                    <Col sm={15}>
+                        <select
+                            value={rating}
+                            onChange = {evt => setRating(evt.target.value)}
+                            required
+                        >
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                    <Col sm={{ span: 10, offset: 1 }}>
+                    <Button type="submit">Add Review</Button>
+                    </Col>
+                </Form.Group>
+            </Form>
         </>
     );
 }

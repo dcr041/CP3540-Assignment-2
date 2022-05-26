@@ -7,12 +7,22 @@ import { fileURLToPath } from 'url';
 import bodyParser from 'body-parser';
 import multer from 'multer';
 
+import fs from 'fs';
+
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const upload = multer({ filename: (req, file) => {file.originalname;}, dest: "./src/build/images/"});
+const storage = multer.diskStorage({
+    destination: "src/build/images/",
+    filename: (req, file, cb) => {
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, fileName)
+    }
+});
+
+const upload = multer({storage: storage});
 
 app.use(express.static(path.join(__dirname, '/build')));
 
@@ -29,7 +39,7 @@ const uploadFiles = async (req, res) => {
             name:req.body.name, 
             date:req.body.date, 
             stars:req.body.stars.split(", "), 
-            poster:"/images/" + req.file.filename, 
+            poster:"images/"+req.file.filename, 
             rating:req.body.rating
         });
 
@@ -48,15 +58,20 @@ app.post('/api/addReview', upload.single("poster"), uploadFiles);
 
 app.post('/api/removeMovie', async (req, res) => {
     try {
-        
+        upload.single("poster");
         const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true});
 
         const db = client.db('movies');
 
-        const movieInfo = await db.collection('mymovies').deleteOne({name:req.body.name});
-        console.log(movieInfo);
+        const movieInfo = await db.collection('mymovies').findOne({name:req.body.name});
+        fs.unlink("src/build/"+movieInfo.poster, (err) => {
+            if (err) {
+              console.error(err)
+              return
+            }});
 
-        if( movieInfo.deletedCount == 1) {
+        let result = await db.collection('mymovies').deleteOne({name:req.body.name});
+        if( result.deletedCount == 1) {
             res.status(200).json({message: `Movie ${req.body.name} deleted`});
         }
         else {
